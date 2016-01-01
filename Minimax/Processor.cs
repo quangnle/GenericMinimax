@@ -16,14 +16,14 @@ namespace Minimax
             var successors = node.GetSuccessors();
             if (successors != null && successors.Count > 0)
             {
-                var minScore = 1000;
+                var maxScore = 0;
                 var chosenNode = successors[0];
                 foreach (var successor in successors)
                 {
-                    var evalScore = Evaluate((T)successor, depth, PlayerType.Min);
-                    if (evalScore < minScore)
+                    var evalScore = Evaluate((T)successor, depth - 1, PlayerType.Min);
+                    if (evalScore > maxScore)
                     {
-                        minScore = evalScore;
+                        maxScore = evalScore;
                         chosenNode = successor;
                     }
                 }
@@ -36,14 +36,29 @@ namespace Minimax
 
         private int Evaluate(T node, int depth, PlayerType playerType)
         {
-            if (depth == 0) return node.Evaluate();
+            var score = node.Evaluate();
+            if (depth == 0 || Math.Abs(score) >= 100000)
+                return score;
+
             var successors = node.GetSuccessors();
+
             if (successors != null & successors.Count > 0)
             {
-                if (playerType == PlayerType.Min)
-                    return successors.Min(n => Evaluate((T)n, depth - 1, PlayerType.Max));
-                else
-                    return successors.Max(n => Evaluate((T)n, depth - 1, PlayerType.Min));
+                var bestValue = 100000;
+                if (playerType == PlayerType.Max)
+                    bestValue = -100000;
+
+                foreach (var successor in successors)
+                {   
+                    var sucPlayerType = playerType == PlayerType.Max ? PlayerType.Min : PlayerType.Max;
+                    var val = Evaluate((T)successor, depth - 1, sucPlayerType);
+                    if (playerType == PlayerType.Max)
+                        bestValue = Math.Max(bestValue, val);
+                    else
+                        bestValue = Math.Min(bestValue, val);
+                }
+
+                return bestValue;
             }
 
             return node.Evaluate();

@@ -91,7 +91,7 @@ namespace TicTacToe
         private void ComputerMove(Board _currentBoard, int row, int col, int originPlayer, int _computer)
         {
             var node = new Node(_currentBoard, row, col, originPlayer, _computer);
-            var move = _processor.GetBestMove(node, 3) as Node;
+            var move = _processor.GetBestMove(node, 1) as Node;
 
             _currentBoard[move.Row, move.Column] = _computer;
             _btnBoard[move.Row, move.Column].Content = "O";

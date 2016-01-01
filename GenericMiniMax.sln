@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Minimax", "Minimax\Minimax.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicTacToe", "TicTacToe\TicTacToe.csproj", "{FB1DB4DF-8F4C-4EEF-A2AA-A07AA4CFB772}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "UnitTest\UnitTest.csproj", "{F15FEC99-0639-4DC6-AF4A-04E6C95FF96A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{FB1DB4DF-8F4C-4EEF-A2AA-A07AA4CFB772}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB1DB4DF-8F4C-4EEF-A2AA-A07AA4CFB772}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB1DB4DF-8F4C-4EEF-A2AA-A07AA4CFB772}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F15FEC99-0639-4DC6-AF4A-04E6C95FF96A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F15FEC99-0639-4DC6-AF4A-04E6C95FF96A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F15FEC99-0639-4DC6-AF4A-04E6C95FF96A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F15FEC99-0639-4DC6-AF4A-04E6C95FF96A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

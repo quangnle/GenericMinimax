@@ -20,7 +20,7 @@ namespace TicTacToe.AI
         private int _opponent;
 
         /// <summary>
-        /// Implementation of INode in order to run Minimax/advanced
+        /// Implementation of INode in order to run Minimax/Advanced
         /// </summary>
         /// <param name="board">Current state of the node</param>
         /// <param name="nRow">Row position of the newly added chess piece</param>
@@ -34,46 +34,76 @@ namespace TicTacToe.AI
             _opponent = opponent;
         }
 
+
         public int Evaluate()
         {
-            int[,] dX = {{-1, 1}, {-1, 1}, {0, 0}, {1, -1}};
-            int[,] dY = {{0, 0}, {-1, 1}, {-1, 1}, {-1, 1}};
+            var pScore = Evaluate(_player);
+            if (pScore >= 100000) return 100000;
 
-            var score = 0;
-            for (int i = 0; i < 4; i++)
-            {   
-                var dscore = 0;
-                var isOccupied = false;
-                for (int j = 0; j < 2; j++)
-                {
-                    var nx = _nCol;
-                    var ny = _nRow;
-                    do
-                    {
-                        nx = nx + dX[i, j];
-                        ny = ny + dY[i, j];
-                        if (nx >= 0 && nx < 3 && ny >= 0 && ny < 3)
-                        {
-                            if (_board[ny, nx] == _player)
-                                dscore = (dscore + 1) * 2;
-                            else if (_board[ny, nx] == 0)
-                                dscore = dscore + 1;
-                            else
-                            {
-                                dscore = 0;
-                                isOccupied = true;
-                                break;
-                            }
-                        }
-                    } while (nx >= 0 && nx < 3 && ny >= 0 && ny < 3);
-
-                    if (isOccupied) break;
-                }
-                score += dscore;
-            }
-
+            var oScore = Evaluate(_opponent);
+            if (oScore >= 100000) return -100000;
+            
+            var score = Evaluate(_player) + Evaluate(_opponent) * (-1);
             return score;
         }
+
+        private int Evaluate(int player)
+        {
+            var score = 0;
+
+            var vectors = new int[,,] {{{0 ,0}, {0, 1}}, 
+                                       {{1, 0}, {0, 1}}, 
+                                       {{2, 0}, {0, 1}}, 
+                                       {{0, 0}, {1, 0}}, 
+                                       {{0, 1}, {1, 0}}, 
+                                       {{0, 2}, {1, 0}}, 
+                                       {{0, 0}, {1, 1}}, 
+                                       {{0, 2}, {1, -1}}};
+
+            // eight lines: 3cols, 3 rows, 2 diagonals
+            for (int i = 0; i < 8; i++)
+            {   
+                var lineScore = 0;
+                var py = vectors[i, 0, 0];
+                var px = vectors[i, 0, 1];
+                var dy = vectors[i, 1, 0];
+                var dx = vectors[i, 1, 1];
+                var nodeCount = 0;
+
+                // 3 cells each line
+                for (int k = 0; k < 3; k++)
+                {
+                    var col = px + dx * k;
+                    var row = py + dy * k;
+                    
+
+                    if (_board[row, col] == player)
+                    {
+                        nodeCount++;
+                        lineScore += (int)Math.Pow(10, nodeCount);
+                    }
+                        
+                    else if (_board[row, col] == 0)
+                        lineScore += 1;
+                    else
+                    {
+                        lineScore = 0;
+                        break;
+                    }
+                }
+                
+                if (lineScore >= 1000)
+                {
+                    score = 100000;
+                    break;
+                }
+                score += lineScore;
+            }
+            
+            return score;
+        }
+
+
 
         public List<INode> GetSuccessors()
         {
