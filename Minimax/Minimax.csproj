@@ -39,7 +39,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlphaBetaEvaluator.cs" />
+    <Compile Include="IEvaluator.cs" />
     <Compile Include="INode.cs" />
+    <Compile Include="MinimaxEvaluator.cs" />
     <Compile Include="PlayerType.cs" />
     <Compile Include="Processor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
