@@ -16,8 +16,8 @@ namespace TicTacToe.AI
         private int _nRow;
         public int Row { get { return _nRow; } }
 
-        private int _player;
-        private int _opponent;
+        private PlayerType _player;
+        private PlayerType _opponent;
 
         /// <summary>
         /// Implementation of INode in order to run Minimax/Advanced
@@ -25,7 +25,7 @@ namespace TicTacToe.AI
         /// <param name="board">Current state of the node</param>
         /// <param name="nRow">Row position of the newly added chess piece</param>
         /// <param name="nCol">Col position of the newly added chess piece</param>
-        public Node(Board board, int nRow, int nCol, int player, int opponent)
+        public Node(Board board, int nRow, int nCol, PlayerType player, PlayerType opponent)
         {
             _board = board;
             _nRow = nRow;
@@ -34,16 +34,15 @@ namespace TicTacToe.AI
             _opponent = opponent;
         }
 
-
         public int Evaluate()
         {
-            var pScore = Evaluate(_player);
-            if (pScore >= 100000) return 100000;
+            var computerScore = Evaluate((int)PlayerType.Max);
+            var playerScore = Evaluate((int)PlayerType.Min);
 
-            var oScore = Evaluate(_opponent);
-            if (oScore >= 100000) return -100000;
-            
-            var score = Evaluate(_player) + Evaluate(_opponent) * (-1);
+            if (computerScore >= 1000) return 1000;
+            if (playerScore >= 1000) return -1000;
+
+            var score = computerScore + playerScore * (-1);
             return score;
         }
 
@@ -60,7 +59,7 @@ namespace TicTacToe.AI
                                        {{0, 0}, {1, 1}}, 
                                        {{0, 2}, {1, -1}}};
 
-            // eight lines: 3cols, 3 rows, 2 diagonals
+            // eight lines: 3 cols, 3 rows, 2 diagonals
             for (int i = 0; i < 8; i++)
             {   
                 var lineScore = 0;
@@ -68,35 +67,34 @@ namespace TicTacToe.AI
                 var px = vectors[i, 0, 1];
                 var dy = vectors[i, 1, 0];
                 var dx = vectors[i, 1, 1];
-                var nodeCount = 0;
+                var playerNodeCount = 0;
+                var zeroNodeCount = 0;
 
                 // 3 cells each line
                 for (int k = 0; k < 3; k++)
                 {
                     var col = px + dx * k;
                     var row = py + dy * k;
-                    
 
                     if (_board[row, col] == player)
-                    {
-                        nodeCount++;
-                        lineScore += (int)Math.Pow(10, nodeCount);
-                    }
-                        
+                        playerNodeCount++;
                     else if (_board[row, col] == 0)
-                        lineScore += 1;
+                        zeroNodeCount += 1;
                     else
                     {
                         lineScore = 0;
+                        playerNodeCount =0;
+                        zeroNodeCount = 0;
                         break;
                     }
                 }
-                
-                if (lineScore >= 1000)
-                {
-                    score = 100000;
-                    break;
-                }
+
+                lineScore += (zeroNodeCount == 3) ? 1 : 0;
+                lineScore += (playerNodeCount == 0) ? 0 : (int)Math.Pow(10, playerNodeCount);
+
+                if (lineScore >= 1000) 
+                    return 1000;
+
                 score += lineScore;
             }
             
@@ -115,7 +113,7 @@ namespace TicTacToe.AI
                     if (_board[row, col] == 0)
                     {
                         var newBoard = _board.Clone();
-                        newBoard[row, col] = _opponent;
+                        newBoard[row, col] = (int)_opponent;
                         var newNode = new Node(newBoard, row, col, _opponent, _player);
                         result.Add(newNode);
                     }

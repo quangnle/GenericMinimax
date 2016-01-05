@@ -5,9 +5,9 @@ using System.Text;
 
 namespace Minimax
 {
-    public enum PlayerType
+    public enum PlayerType : int
     {
-        Min,
-        Max
+        Min = 1,
+        Max = 2
     }
 }

@@ -16,7 +16,7 @@ namespace Minimax
             var successors = node.GetSuccessors();
             if (successors != null && successors.Count > 0)
             {
-                var maxScore = 0;
+                var maxScore = -1000;
                 var chosenNode = successors[0];
                 foreach (var successor in successors)
                 {
@@ -37,31 +37,20 @@ namespace Minimax
         private int Evaluate(T node, int depth, PlayerType playerType)
         {
             var score = node.Evaluate();
-            if (depth == 0 || Math.Abs(score) >= 100000)
+            if (depth == 0 || Math.Abs(score) >= 1000)
                 return score;
 
             var successors = node.GetSuccessors();
 
             if (successors != null & successors.Count > 0)
             {
-                var bestValue = 100000;
                 if (playerType == PlayerType.Max)
-                    bestValue = -100000;
-
-                foreach (var successor in successors)
-                {   
-                    var sucPlayerType = playerType == PlayerType.Max ? PlayerType.Min : PlayerType.Max;
-                    var val = Evaluate((T)successor, depth - 1, sucPlayerType);
-                    if (playerType == PlayerType.Max)
-                        bestValue = Math.Max(bestValue, val);
-                    else
-                        bestValue = Math.Min(bestValue, val);
-                }
-
-                return bestValue;
+                    return successors.Max(n => Evaluate((T)n, depth - 1, PlayerType.Min));
+                else
+                    return successors.Min(n => Evaluate((T)n, depth - 1, PlayerType.Max));
             }
 
-            return node.Evaluate();
+            return score;
         }
     }
 }
