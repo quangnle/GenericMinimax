@@ -11,7 +11,7 @@ namespace UnitTest
         [TestMethod]
         public void TestNodeEvaluation()
         {
-            var processor = new Processor<Node>();
+            var processor = new Processor(new MinimaxEvaluator(-1000, 1000));
             var board = new Board();
             var node = new Node(board, 0, 0, PlayerType.Max, PlayerType.Min);
             var score = node.Evaluate();

@@ -24,13 +24,13 @@ namespace TicTacToe
     {
         private Button[,] _btnBoard = null;
         private Board _currentBoard;
-        private Processor<Node> _processor;
+        private Processor _processor;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            _processor = new Processor<Node>();
+            _processor = new Processor(new AlphaBetaEvaluator(-1000, 1000));
 
             _currentBoard = new Board();
             _btnBoard = new Button[3, 3];
