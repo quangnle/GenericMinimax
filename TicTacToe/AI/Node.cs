@@ -19,6 +19,8 @@ namespace TicTacToe.AI
         private PlayerType _player;
         private PlayerType _opponent;
 
+        public bool IsTerminated { get; private set; }
+
         /// <summary>
         /// Implementation of INode in order to run Minimax/Advanced
         /// </summary>
@@ -40,7 +42,7 @@ namespace TicTacToe.AI
             var playerScore = Evaluate((int)PlayerType.Min);
 
             if (computerScore >= 1000) return 1000;
-            if (playerScore >= 1000) return -1000;
+            if (playerScore <= -1000) return -1000;
 
             var score = computerScore + playerScore * (-1);
             return score;
@@ -92,8 +94,12 @@ namespace TicTacToe.AI
                 lineScore += (zeroNodeCount == 3) ? 1 : 0;
                 lineScore += (playerNodeCount == 0) ? 0 : (int)Math.Pow(10, playerNodeCount);
 
-                if (lineScore >= 1000) 
+                if (lineScore >= 1000)
+                {
+                    IsTerminated = true;
                     return 1000;
+                }
+                    
 
                 score += lineScore;
             }

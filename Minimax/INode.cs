@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 namespace Minimax
 {
     public interface INode
-    {
+    {   
         int Evaluate();
+        bool IsTerminated { get; } 
         List<INode> GetSuccessors();
     }
 }

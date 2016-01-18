@@ -20,7 +20,7 @@ namespace Minimax
         public int Evaluate(INode node, int depth, PlayerType playerType)
         {
             var score = node.Evaluate();
-            if (depth == 0 || Math.Abs(score) >= 1000)
+            if (depth == 0 || node.IsTerminated)
                 return score;
 
             var successors = node.GetSuccessors();

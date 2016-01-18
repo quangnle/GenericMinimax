@@ -26,7 +26,7 @@ namespace Minimax
         private int AlphaBeta(INode node, int depth, int alpha, int beta, PlayerType playerType)
         {
             var score = node.Evaluate();
-            if (depth == 0 || score == MinValue || score == MaxValue) 
+            if (depth == 0 || node.IsTerminated)
                 return score;
 
             var successors = node.GetSuccessors();
